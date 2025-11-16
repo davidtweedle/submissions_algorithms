@@ -313,7 +313,7 @@ def init_optimizer_state(
     else:
         rank_val = None
 
-    labels = create_param_labels()(params_zeros_like)
+    labels = create_param_labels()  # (params_zeros_like)
 
 
     opt_init_fn, opt_update_fn = low_rank_orthogonal_update(
@@ -324,7 +324,7 @@ def init_optimizer_state(
             krylov_iter=krylov_iter,
             rank_type=rank_type,
             rank_val=rank_val,
-            labels=labels
+            param_label_fn=param_label_fn
             )
     optimizer_state = opt_init_fn(params_zeros_like)
     return optimizer_state, opt_update_fn
