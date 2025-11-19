@@ -111,7 +111,7 @@ def train_step(workload,
     (summed_loss, (n_valid_examples, new_model_state)), grad = grad_fn(
           current_param_container)
     summed_loss = jax.lax.psum(summed_loss, axis_name='batch')
-    total_n_valid_examples jax.lax.psum(n_valid_examples, axis_name='batch')
+    total_n_valid_examples = jax.lax.psum(n_valid_examples, axis_name='batch')
     grad = jax.lax.pmean(grad, axis_name='batch')
     # Get correct global mean loss and grad.
     loss = summed_loss / total_n_valid_examples
