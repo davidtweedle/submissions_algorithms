@@ -266,7 +266,7 @@ def get_batch_size(workload_name):
     elif workload_name == 'mnist':
         return 16
     elif workload_name == 'cifar':
-        return 1024
+        return 128
     else:
         raise ValueError(f'Unsupported workload name: {workload_name}.')
 
