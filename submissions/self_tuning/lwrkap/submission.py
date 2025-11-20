@@ -29,6 +29,8 @@ import jax
 import jax.numpy as jnp
 import optax
 
+from absl import logging
+
 from flax import struct
 from lra_opt import low_rank_orthogonal_update, create_param_labels
 
@@ -302,6 +304,7 @@ def init_optimizer_state(
     params_zeros_like = jax.tree.map(
             lambda s: jnp.zeros(s.shape_tuple), workload.param_shapes
             )
+    logging.info(f"DEBUG PARAM KEYS: {jax.tree.structure(params_zeros_like)}")
     lr = HPARAMS['learning_rate']
     beta1 = HPARAMS['beta1']
     beta2 = HPARAMS['beta2']
