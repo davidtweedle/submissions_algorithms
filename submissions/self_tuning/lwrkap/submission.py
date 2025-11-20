@@ -111,8 +111,8 @@ def train_step(workload,
     (summed_loss, (n_valid_examples, new_model_state)), grad = grad_fn(
           current_param_container)
     # Get correct global mean loss and grad.
-    loss = summed_loss / total_n_valid_examples
-    grad = jax.tree.map(lambda x: x / total_n_valid_examples, grad)
+    loss = summed_loss / n_valid_examples
+    grad = jax.tree.map(lambda x: x / n_valid_examples, grad)
 
     grad_norm = jnp.sqrt(
           sum(jnp.sum(g**2) for g in jax.tree_util.tree_leaves(grad)))
@@ -186,6 +186,7 @@ def update_params(
             replicated, # loss
             replicated, # grad_norm
             )
+    _maybe_start_profile(global_step)
     jitted_train_step = jax.jit(
             train_step,
             static_argnums=(0, 1),
@@ -194,7 +195,6 @@ def update_params(
             out_shardings=out_shardings,
             )
 
-    _maybe_start_profile(global_step)
 
     outputs = jitted_train_step(workload,
                                 opt_update_fn,
